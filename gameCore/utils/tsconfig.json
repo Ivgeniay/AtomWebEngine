@@ -14,9 +14,5 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "paths": {
-      "@math/*": ["../mathLib/src"],
-      "@utils/*": ["../utils/src/"]
-    }
   }
 }

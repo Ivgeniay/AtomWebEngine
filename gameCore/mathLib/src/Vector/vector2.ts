@@ -1,10 +1,22 @@
 export class Vector2 {
-    x: number;
-    y: number;
+    readonly x: number;
+    readonly y: number;
 
     constructor(x: number = 0, y: number = 0) {
         this.x = x;
         this.y = y;
+    }
+
+    add(other: Vector2): Vector2 {
+        return new Vector2(this.x + other.x, this.y + other.y);
+    }
+
+    setX(x: number): Vector2 {
+        return new Vector2(x, this.y);
+    }
+
+    setY(y: number): Vector2 {
+        return new Vector2(this.x, y);
     }
 
     toArray(): number[] {

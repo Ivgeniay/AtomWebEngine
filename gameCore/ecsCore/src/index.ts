@@ -1,1 +1,1 @@
-export { IComponent, IWorld, ISystem, QueryEntity, IDisposable } from './types';
+export { IComponent, IWorld, ISystem, QueryEntity } from './types';

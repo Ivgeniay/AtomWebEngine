@@ -1,5 +1,5 @@
 export class Matrix3 {
-    elements: Float32Array;
+    readonly elements: Float32Array;
 
     constructor() {
         this.elements = new Float32Array(9);

@@ -1,8 +1,8 @@
 export class Quaternion {
-    x: number;
-    y: number;
-    z: number;
-    w: number;
+    readonly x: number;
+    readonly y: number;
+    readonly z: number;
+    readonly w: number;
 
     constructor(x: number = 0, y: number = 0, z: number = 0, w: number = 1) {
         this.x = x;

@@ -37,10 +37,16 @@ export interface IPhysicsSystem extends ISystem {
     update(world: IWorld, fixedDeltaTime: number) : void;
 }
 
-export interface IDisposable {
+
+export interface IComponentRegistry {
+    getComponent<T>(entityId: EntityId, componentClass: new() => T): T;
+    hasComponent<T>(entityId: EntityId, componentClass: new() => T): boolean;
+    addComponent<T>(entityId: EntityId, component: T, componentClass: new() => T): T;
+    removeComponent<T>(entityId: EntityId, componentClass: new() => T): void;
+    removeAllComponents(entityId: EntityId): void;
+    getEntitiesWithComponent<T>(componentClass: new() => T): EntityId[];
     dispose(): void;
 }
-
 
 
 

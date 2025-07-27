@@ -1,11 +1,15 @@
-import { Vector3 } from "@math/*";
 import { IComponent, EntityId } from "../types";
+import { observable } from "@utils/*";
+import { Vector3 } from "@math/*";
 
 export class Tranform implements IComponent {
     owner: EntityId;
 
+    @observable 
     position: Vector3;
+    @observable 
     rotation: Vector3;
+    @observable 
     scale: Vector3;
 
     constructor(owner: EntityId) {
