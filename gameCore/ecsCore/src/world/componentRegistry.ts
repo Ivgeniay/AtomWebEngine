@@ -2,123 +2,124 @@ import { EntityId, IComponentRegistry } from "../types";
 import { IDisposable } from "@utils/*";
 
 class ComponentRegistry implements IComponentRegistry {
-    private components: Map<string, Map<EntityId, any>>;
-    private entityVersions: Map<EntityId, number>;
+	private components: Map<string, Map<EntityId, any>>;
+	private entityVersions: Map<EntityId, number>;
 
-    constructor(entityVersions: Map<EntityId, number>) {
-        this.components = new Map();
-        this.entityVersions = entityVersions;
-    }
+	constructor(entityVersions: Map<EntityId, number>) {
+		this.components = new Map();
+		this.entityVersions = entityVersions;
+	}
 
-    getComponent<T>(entityId: EntityId, componentClass: new() => T): T {
-        this.validateEntity(entityId);
-        
-        const componentName = componentClass.name;
-        const componentMap = this.components.get(componentName);
-        
-        if (!componentMap) {
-            throw new Error(`Component ${componentName} is not registered`);
-        }
+	getComponent<T>(
+		entityId: EntityId,
+		componentClass: new (entity: EntityId) => T
+	): T {
+		const componentName = componentClass.name;
+		const componentMap = this.components.get(componentName);
 
-        const component = componentMap.get(entityId);
-        if (!component) {
-            throw new Error(`Entity ${entityId} does not have component ${componentName}`);
-        }
+		if (!componentMap) {
+			throw new Error(`Component ${componentName} is not registered`);
+		}
 
-        return component;
-    }
+		const component = componentMap.get(entityId);
+		if (!component) {
+			throw new Error(
+				`Entity ${entityId} does not have component ${componentName}`
+			);
+		}
 
-    hasComponent<T>(entityId: EntityId, componentClass: new() => T): boolean {
-        if (!this.isEntityValid(entityId)) {
-            return false;
-        }
+		return component;
+	}
 
-        const componentName = componentClass.name;
-        const componentMap = this.components.get(componentName);
-        return componentMap?.has(entityId) ?? false;
-    }
+	hasComponent<T>(
+		entityId: EntityId,
+		componentClass: new (entity: EntityId) => T
+	): boolean {
+		const componentName = componentClass.name;
+		const componentMap = this.components.get(componentName);
+		return componentMap?.has(entityId) ?? false;
+	}
 
-    addComponent<T>(entityId: EntityId, component: T, componentClass: new() => T): T {
-        this.validateEntity(entityId);
-        
-        const componentName = componentClass.name;
-        
-        if (!this.components.has(componentName)) {
-            this.components.set(componentName, new Map());
-        }
+	addComponent<T>(
+		entityId: EntityId,
+		component: T,
+		componentClass: new (entity: EntityId) => T
+	): T {
+		const componentName = componentClass.name;
 
-        const componentMap = this.components.get(componentName)!;
-        
-        if (componentMap.has(entityId)) {
-            throw new Error(`Entity ${entityId} already has component ${componentName}`);
-        }
+		if (!this.components.has(componentName)) {
+			this.components.set(componentName, new Map());
+		}
 
-        componentMap.set(entityId, component);
-        return component;
-    }
+		const componentMap = this.components.get(componentName)!;
 
-    removeComponent<T>(entityId: EntityId, componentClass: new() => T): void {
-        this.validateEntity(entityId);
-        
-        const componentName = componentClass.name;
-        const componentMap = this.components.get(componentName);
-        
-        if (!componentMap || !componentMap.has(entityId)) {
-            throw new Error(`Entity ${entityId} does not have component ${componentName}`);
-        }
+		if (componentMap.has(entityId)) {
+			throw new Error(
+				`Entity ${entityId} already has component ${componentName}`
+			);
+		}
 
-        const component = componentMap.get(entityId);
-        if (this.isDisposable(component)) {
-            component.dispose();
-        }
-        componentMap.delete(entityId);
-    }
+		componentMap.set(entityId, component);
+		return component;
+	}
 
-    removeAllComponents(entityId: EntityId): void {
-        this.components.forEach(componentMap => {
-            const component = componentMap.get(entityId);
-            if (this.isDisposable(component)) {
-                component.dispose();
-            }
-            componentMap.delete(entityId);
-        });
-    }
+	removeComponent<T>(
+		entityId: EntityId,
+		componentClass: new (entity: EntityId) => T
+	): void {
+		const componentName = componentClass.name;
+		const componentMap = this.components.get(componentName);
 
-    getEntitiesWithComponent<T>(componentClass: new() => T): EntityId[] {
-        const componentName = componentClass.name;
-        const componentMap = this.components.get(componentName);
-        
-        if (!componentMap) {
-            return [];
-        }
+		if (!componentMap || !componentMap.has(entityId)) {
+			throw new Error(
+				`Entity ${entityId} does not have component ${componentName}`
+			);
+		}
 
-        return Array.from(componentMap.keys()).filter(entityId => this.isEntityValid(entityId));
-    }
+		const component = componentMap.get(entityId);
+		if (this.isDisposable(component)) {
+			component.dispose();
+		}
+		componentMap.delete(entityId);
+	}
 
-    dispose(): void {
-        this.components.forEach(componentMap => {
-            componentMap.forEach(component => {
-                if (this.isDisposable(component)) {
-                    component.dispose();
-                }
-            });
-        });
-        this.components.clear();
-    }
+	removeAllComponents(entityId: EntityId): void {
+		this.components.forEach((componentMap) => {
+			const component = componentMap.get(entityId);
+			if (this.isDisposable(component)) {
+				component.dispose();
+			}
+			componentMap.delete(entityId);
+		});
+	}
 
-    private isDisposable(obj: any): obj is IDisposable {
-        return obj && typeof obj.dispose === 'function';
-    }
+	getEntitiesWithComponent<T>(
+		componentClass: new (entity: EntityId) => T
+	): EntityId[] {
+		const componentName = componentClass.name;
+		const componentMap = this.components.get(componentName);
 
-    private validateEntity(entityId: EntityId): void {
-        if (!this.isEntityValid(entityId)) {
-            throw new Error(`Entity ${entityId} is not valid or has been destroyed`);
-        }
-    }
+		if (!componentMap) {
+			return [];
+		}
 
-    private isEntityValid(entityId: EntityId): boolean {
-        return this.entityVersions.has(entityId);
-    }
+		return Array.from(componentMap.keys());
+	}
+
+	dispose(): void {
+		this.components.forEach((componentMap) => {
+			componentMap.forEach((component) => {
+				if (this.isDisposable(component)) {
+					component.dispose();
+				}
+			});
+		});
+		this.components.clear();
+	}
+
+	private isDisposable(obj: any): obj is IDisposable {
+		return obj && typeof obj.dispose === "function";
+	}
 }
 
 export { ComponentRegistry };

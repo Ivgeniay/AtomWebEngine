@@ -1,22 +1,21 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom", 
-      "es2015", 
-      "es2017"
-    ],
-    "allowJs": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "paths": {
-      "@math/*": ["../mathLib/src"],
-      "@utils/*": ["../utils/src/"]
-    }
-  }
+	"include": ["src/**/*"],
+	"exclude": ["node_modules"],
+	"compilerOptions": {
+		"target": "es5",
+		"lib": ["dom", "es2015", "es2017"],
+		"allowJs": true,
+		"strict": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true,
+		"noFallthroughCasesInSwitch": true,
+		"module": "esnext",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"paths": {
+			"@math/*": ["../mathLib/src"],
+			"@utils/*": ["../utils/src/"]
+		}
+	}
 }
