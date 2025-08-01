@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { World } from "@ecsCore/*";
-import { Transform } from "../../../gameCore/ecsCore/src/components/transform";
+import { World, Transform } from "@ecsCore/*";
 
 describe("World", () => {
 	let world: World;
@@ -14,7 +13,7 @@ describe("World", () => {
 			const entityId = world.createEntity();
 
 			expect(entityId).toBe(0);
-			expect(world.isEntityValid(entityId)).toBe(true);
+			expect(world.isEntityValid(entityId, 0)).toBe(true);
 		});
 
 		it("should create multiple entities with incremental ids", () => {
@@ -32,7 +31,7 @@ describe("World", () => {
 
 			world.destroyEntity(entityId);
 
-			expect(world.isEntityValid(entityId)).toBe(false);
+			expect(world.isEntityValid(entityId, 0)).toBe(false);
 		});
 
 		it("should throw when destroying invalid entity", () => {
@@ -92,7 +91,7 @@ describe("World", () => {
 
 			world.dispose();
 
-			expect(world.isEntityValid(entityId)).toBe(false);
+			expect(world.isEntityValid(entityId, 0)).toBe(false);
 		});
 	});
 });
