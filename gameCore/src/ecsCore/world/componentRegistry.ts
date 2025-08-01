@@ -1,5 +1,5 @@
 import { EntityId, IComponentRegistry } from "../types";
-import { IDisposable } from "@utils/*";
+import { IDisposable } from "../../utils";
 
 class ComponentRegistry implements IComponentRegistry {
 	private components: Map<string, Map<EntityId, any>>;

@@ -1,6 +1,6 @@
 import { IComponent, EntityId } from "../types";
-import { observable } from "@utils/*";
-import { Vector3 } from "@math/*";
+import { observable } from "../../utils";
+import { Vector3 } from "../../mathLib";
 
 export class Transform implements IComponent {
 	owner: EntityId;

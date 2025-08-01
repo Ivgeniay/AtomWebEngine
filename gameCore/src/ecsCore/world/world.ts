@@ -1,3 +1,4 @@
+import { IDisposable } from "../../utils";
 import {
 	EntityId,
 	ICommonSystem,
@@ -7,7 +8,6 @@ import {
 	QueryEntity,
 } from "../types";
 import { ComponentRegistry } from "./componentRegistry";
-import { IDisposable } from "@utils/*";
 
 export class World implements IWorld, IDisposable {
 	private componentRegistry: ComponentRegistry;
